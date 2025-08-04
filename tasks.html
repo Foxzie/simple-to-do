@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Daftar Tugas</title>
+  </head>
+  <body class="bg-gray-100 font-sans p-8">
+    <main class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+        Daftar Tugas Anda
+      </h1>
+      <div id="task-list" class="space-y-4"></div>
+      <a
+        href="index.html"
+        class="mt-8 inline-block w-full text-center bg-blue-500 text-white p-3 rounded-md font-bold hover:bg-blue-600 transition-colors duration-150 ease-in-out"
+      >
+        Kembali ke Form
+      </a>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const taskListContainer = document.getElementById("task-list");
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        // Fungsi untuk merender daftar tugas
+        function renderTasks() {
+          taskListContainer.innerHTML = ""; // Kosongkan container sebelum merender ulang
+
+          if (tasks.length === 0) {
+            taskListContainer.innerHTML =
+              '<p class="text-center text-gray-500">Tidak ada tugas yang tersimpan.</p>';
+          } else {
+            tasks.forEach((task, index) => {
+              const taskElement = `
+                <div class="bg-gray-50 p-4 rounded-md shadow-sm relative">
+                  <h3 class="text-xl font-bold text-gray-800 mb-2">Tugas #${
+                    index + 1
+                  }</h3>
+                  <p><strong>Deskripsi Tugas:</strong> ${
+                    task.desc || "Tidak ada data"
+                  }</p>
+                  <p><strong>Tanggal & Waktu:</strong> ${
+                    task.date ? task.date.replace("T", " ") : "Tidak ada data"
+                  }</p>
+                  <p><strong>Prioritas:</strong> ${
+                    task.priority || "Tidak ada data"
+                  }</p>
+                  <p><strong>Kategori:</strong> ${
+                    task.category || "Tidak ada data"
+                  }</p>
+
+                  <button
+                    class="delete-task absolute top-2 right-2 bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors duration-150"
+                    data-index="${index}"
+                  >
+                    ✓
+                  </button>
+                </div>
+              `;
+              taskListContainer.innerHTML += taskElement;
+            });
+
+            // Tambahkan event listener untuk tombol delete setelah elemen dirender
+            document.querySelectorAll(".delete-task").forEach((button) => {
+              button.addEventListener("click", function (event) {
+                const index = event.target.dataset.index;
+
+                // Hapus tugas dari array
+                tasks.splice(index, 1);
+
+                // Simpan kembali array yang sudah diperbarui ke localStorage
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+
+                // Render ulang daftar tugas
+                renderTasks();
+              });
+            });
+          }
+        }
+
+        // Panggil fungsi renderTasks saat halaman pertama kali dimuat
+        renderTasks();
+      });
+    </script>
+  </body>
+</html>
