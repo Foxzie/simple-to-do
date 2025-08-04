@@ -2,7 +2,7 @@
   "name": "calculator-app",
   "version": "1.0.0",
   "description": "A simple calculator built with HTML, CSS, and JavaScript.",
-  "homepage": "https://foxzie.github.io/calculator",
+  "homepage": "https://foxzie.github.io/simple-to-do",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
